@@ -1,0 +1,8 @@
+employee 
+    - Create table employee 
+        Id Firstname Lastname Gender Dob Email Tel Address Role CreateAt 
+    - Learn Build api employee
+        - api list emplyee
+        - api create employee
+        - api update employee
+        - api remove employee

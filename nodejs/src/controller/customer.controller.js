@@ -3,7 +3,7 @@ const db = require("../util/db")
 
 const getAll = (req,res) => {
     // db.query("sql statemen","handler")
-    db.query(" SELECT * FROM `customer` WHERE customer_id = 1 ",(error,rows)=>{
+    db.query(" SELECT * FROM `customer`",(error,rows)=>{
         if(!error){// mean no error
             res.json({
                 customer_list: rows
@@ -29,7 +29,7 @@ const create = (req,res) => {
     } = req.body
     var sqlInsert = " INSERT INTO customer ( firstname, lastname, gender, dob, tel, email) VALUES ( ?, ?, ?, ?, ?, ?)"
     var sqlParam = [firstname,lastname,gender,dob,tel,email]
-    db.query(sqlInsert,sqlParam,(error,rows)=>{
+    db.query(sqlInsert,sqlParam,(error,orws)=>{
         if(!error){
             res.json({
                 message:"Insert successfully!",
@@ -63,9 +63,31 @@ const remove = (req,res) => {
 }
 
 const update = (req,res) => {
-    res.json({
-        message: "Update customer"
-    })
+    var {
+        customer_id,
+        firstname,
+        lastname,
+        gender,
+        dob,
+        tel,
+        email 
+     } = req.body
+    //  var sqlInsert = " INSERT INTO customer ( firstname, lastname, gender, dob, tel, email) VALUES ( ?, ?, ?, ?, ?, ?)"
+    var sqlUpdate = " UPDATE customer SET  firstname=?, lastname=?, gender=?, dob=?, tel=?, email=? WHERE customer_id = ? "
+     var sqlParam = [firstname,lastname,gender,dob,tel,email,customer_id]
+     db.query(sqlUpdate,sqlParam,(error,rows)=>{
+         if(!error){
+             res.json({
+                 message:"Update successfully!",
+                 data:rows
+             })
+         }else{
+             res.json({
+                 error:true,
+                 message:error
+             })
+         }
+     })
 }
 
 module.exports = {
