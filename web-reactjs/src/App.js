@@ -5,6 +5,7 @@ import HomePage from "./page/home/HomePage";
 import AboutPage from "./page/about/AboutPage";
 import LoginPage from "./page/auth/LoginPage";
 import RegisterPage from "./page/auth/RegisterPage"
+import CategoryPage from "./page/category/CategoryPage";
 import Layout from "./component/layout/Layout";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout/>}>
           <Route path="" element={<HomePage />}/>
+          <Route path="category" element={<CategoryPage />}/>
           <Route path="about" element={<AboutPage/>} />
           <Route path="login" element={<LoginPage/>} />
           <Route path="register" element={<RegisterPage/>} />

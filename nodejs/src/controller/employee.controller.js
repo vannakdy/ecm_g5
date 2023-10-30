@@ -1,14 +1,44 @@
 
 const db = require("../util/db")
 
-const getAll = (req,res) => {
+const getAll = async (req,res) => {
+    const listEmployee = await db.query("SELECT * FROM employee");
+    const total = await db.query("SELECT COUNT(Id) as Total FROM employee; ")
+    res.json({
+        list:listEmployee,
+        totalRecord:total,
+    })
+
+    // const sqlInser = "INSERT INTO ...."
+    // var param = ["soke",....]
+    // const data = await db.query(sqlInser,param)
+    // res.json({
+    //     message: "insert success"
+    // })
+}
+
+const getAll1 = (req,res) => {
+    // Way1
     var sql = "SELECT * FROM employee"
+    var sqlCustomer = "SELECT * FROM customer"
     // db.query("sql","handler")
     // db.query("sql",["param"],"handler")
     db.query(sql,(error,rows)=>{
         if(!error){
-            res.json({
-                list:rows
+            // SELECT customer 
+            db.query(sqlCustomer,(error1,rows1)=>{
+                if(!error1){
+                    // success all 
+                    res.json({
+                        list_employee:rows,
+                        list_customer:rows1
+                    })
+                }else{
+                    res.json({
+                        error:true,
+                        message:error1
+                    })
+                }
             })
         }else{
             res.json({

@@ -1,0 +1,13 @@
+
+
+Category 
+    Id Name Description Parent Status CreateAt
+
++ Create api Category 
+    - list all 
+    - list one
+    - create
+    - update 
+    - remove 
+
+asyn and await
