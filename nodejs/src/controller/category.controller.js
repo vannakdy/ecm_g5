@@ -3,7 +3,7 @@ const db = require("../util/db");
 
 const getAll = async (req,res) => {
     try{
-        var sqlSelect = "SELECT * FROM category";
+        var sqlSelect = "SELECT * FROM category ORDER BY Id DESC";
         var sqlTotal = "SELECT COUNT(Id) as Total FROM category";
         const list = await db.query(sqlSelect)
         const total = await db.query(sqlTotal)

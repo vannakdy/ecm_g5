@@ -5,10 +5,110 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-function Layout() {
+import { useState } from "react"
+import {
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    UploadOutlined,
+    UserOutlined,
+    VideoCameraOutlined,
+} from '@ant-design/icons';
+import { Layout, Menu, Button, theme } from 'antd';
+const { Header, Sider, Content } = Layout;
+
+function MainLayout() {
+
+    const [collapsed, setCollapsed] = useState(false);
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
+
+    const navigate = useNavigate();
+
+    const onLinkPage = (routeName) => { // use for link to other page 
+        navigate(routeName) // /category , /login
+    }
+
     return (
         <div>
-            <Navbar expand="lg" className="bg-body-tertiary">
+            <Layout>
+                <Sider trigger={null} collapsible collapsed={collapsed}>
+                    <div className="demo-logo-vertical" />
+                    <Menu
+                        theme="dark"
+                        mode="inline"
+                        defaultSelectedKeys={['1']}
+                        items={[
+                            {
+                                key: '1',
+                                icon: <UserOutlined />,
+                                label: 'Dashboard',
+                                onClick : () => onLinkPage("/")
+                            },
+                            {
+                                key: '2',
+                                icon: <VideoCameraOutlined />,
+                                label: 'Category',
+                                onClick : () => onLinkPage("/category")
+                            },
+                            {
+                                key: '3',
+                                icon: <UploadOutlined />,
+                                label: 'Customer',
+                                onClick : () => onLinkPage("/customer")
+                                
+                            },
+                            {
+                                key: '4',
+                                icon: <UploadOutlined />,
+                                label: 'Emplyee',
+                                onClick : () => onLinkPage("/employee")
+                                
+                            }
+                        ]}
+                    />
+                </Sider>
+                <Layout>
+                    <Header
+                        style={{
+                            padding: 0,
+                            background: colorBgContainer,
+                        }}
+                    >
+                        {/* <Button
+                            type="text"
+                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: '16px',
+                                width: 64,
+                                height: 64,
+                            }}
+                        /> */}
+                        <Button onClick={()=>setCollapsed(!collapsed)}>Toggle</Button>
+                        
+                    </Header>
+                    <Content
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            minHeight: "100vh",
+                            background: colorBgContainer,
+                        }}
+                    >
+                        <Outlet />
+                    </Content>
+                </Layout>
+            </Layout>
+           
+        </div>
+    );
+}
+
+export default MainLayout;
+
+
+{/* <Navbar expand="lg" className="bg-body-tertiary">
                 <Container>
                     <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -31,16 +131,9 @@ function Layout() {
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
-            </Navbar>
+            </Navbar> */}
 
-            <div style={{padding:20}}>
-                <Outlet/>
-            </div>
-        </div>
-    );
-}
 
-export default Layout;
 // const Layout = () => {
 
 //     const navigate = useNavigate()

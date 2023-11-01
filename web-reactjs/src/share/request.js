@@ -1,0 +1,34 @@
+import axios from "axios"
+
+const base_url = "http://localhost:8081/api/";
+
+export const request = (url="",method="get",data={}) => {
+    return axios({
+        url: base_url + url,
+        method:method,
+        data:data
+    }).then(res=>{
+       return res.data;
+    }).catch(error=>{
+       return false
+    }).finally(()=>{
+        
+    })
+}
+
+
+// create a function to get data category api
+const funtionGetDataFromApi = () => { // arrow function
+    // body function 
+    axios({
+        url:"", // url of api (localhost:8081/api/cagetory,localhost:8081/api/customer)
+        method:"", // get,post,put,delete http method
+        data:{} // can we want past parameter api
+    }).then(res=>{
+        // block respones succes from api
+    }).catch(error=>{
+        // block api respone api
+    }).finally(()=>{
+        // block always call 
+    })
+}
