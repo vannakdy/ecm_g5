@@ -10,12 +10,13 @@ import CustomerPage from "./page/customer/CustomerPage";
 import EmplyeePage from "./page/employee/EmployeePage";
 import Layout from "./component/layout/Layout";
 import LayoutLogin from "./component/layout/LayoutLogin";
+import { useEffect } from "react";
 
 function App() {
+  
   return (
     <BrowserRouter>
       <Routes>
-
         <Route path="/" element={<Layout/>}>
           <Route path="" element={<HomePage />}/>
           <Route path="category" element={<CategoryPage />}/>
@@ -29,6 +30,7 @@ function App() {
           <Route path="login" element={<LoginPage/>} />
           <Route path="register" element={<RegisterPage/>} />
         </Route>
+
       </Routes>
     </BrowserRouter>
   )

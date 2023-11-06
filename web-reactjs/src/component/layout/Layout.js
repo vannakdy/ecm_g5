@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -17,6 +17,12 @@ import { Layout, Menu, Button, theme } from 'antd';
 const { Header, Sider, Content } = Layout;
 
 function MainLayout() {
+    const isLogin = localStorage.getItem("isLogin")
+    useEffect(()=>{
+        if(isLogin == null || isLogin == 'null'){ // mean not login
+            window.location.href = "/login" // direct login page
+        }
+    },[])
 
     const [collapsed, setCollapsed] = useState(false);
     const {
@@ -27,6 +33,15 @@ function MainLayout() {
 
     const onLinkPage = (routeName) => { // use for link to other page 
         navigate(routeName) // /category , /login
+    }
+
+    const onLogout = () => {
+        localStorage.setItem("isLogin",null)
+        window.location.href="/login"
+    }
+
+    if(isLogin == null || isLogin == 'null'){
+        return null
     }
 
     return (
@@ -86,6 +101,7 @@ function MainLayout() {
                             }}
                         /> */}
                         <Button onClick={()=>setCollapsed(!collapsed)}>Toggle</Button>
+                        <Button onClick={onLogout}>Logout</Button>
                         
                     </Header>
                     <Content
