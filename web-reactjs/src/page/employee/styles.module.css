@@ -1,0 +1,15 @@
+
+.headerContainer{
+    background-color: rgb(214, 223, 223);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.containFilter{
+    display: flex;
+}
+.txtHeader{
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 15px;
+}

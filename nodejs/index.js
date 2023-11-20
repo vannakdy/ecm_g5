@@ -2,8 +2,8 @@
 const express = require("express");
 const app = express(); // extend from express 
 const cors = require("cors")
-app.use(express.json()) // req.body ( get params json body )
 
+app.use(express.json()) // req.body ( get params json body )
 // need to allow cross origin
 app.use(cors({origin:"*"}))
 

@@ -29,7 +29,7 @@ const create = (req,res) => {
     } = req.body
     var sqlInsert = " INSERT INTO customer ( firstname, lastname, gender, dob, tel, email) VALUES ( ?, ?, ?, ?, ?, ?)"
     var sqlParam = [firstname,lastname,gender,dob,tel,email]
-    db.query(sqlInsert,sqlParam,(error,orws)=>{
+    db.query(sqlInsert,sqlParam,(error,rows)=>{
         if(!error){
             res.json({
                 message:"Insert successfully!",

@@ -30,6 +30,8 @@ const create = async (req,res) => {
     const {
         Name, Description, Parent, Status
     } = req.body;
+
+    // var Name = req.body.Name;
     var sqlInsert = "INSERT INTO category (Name, Description, Parent, Status) VALUES (?,?,?,?) ";
     var param = [ Name, Description, Parent, Status];
     const data = await db.query(sqlInsert,param);

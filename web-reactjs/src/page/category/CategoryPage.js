@@ -26,6 +26,7 @@ const CategryPage = () => {
         //         setList(res.list)
         //     }
         // })
+        
         const res = await request("category","get",{})
         if(res){
             setList(res.list)
