@@ -1,12 +1,21 @@
 
 const db = require("../util/db")
+const bcrypt = require("bcrypt")
 
 const getAll = async (req,res) => {
-    const listEmployee = await db.query("SELECT * FROM employee");
+    // req.query, req.params, req.body
+    const {textSearch} = req.query;
+    var sqlSelect = "SELECT * FROM employee ";
+    // SELECT * FROM employee LIMIT 3 OFFSET 1;
+    if(textSearch != null && textSearch != ""){
+        sqlSelect += " WHERE Firstname LIKE '%"+textSearch+"%' OR Lastname LIKE '%"+textSearch+"%' OR Tel LIKE '%"+textSearch+"%' "
+    }
+    
+    const listEmployee = await db.query(sqlSelect);
     const total = await db.query("SELECT COUNT(Id) as Total FROM employee; ")
     res.json({
         list:listEmployee,
-        totalRecord:total,
+        total:total,
     })
 
     // const sqlInser = "INSERT INTO ...."
@@ -88,6 +97,92 @@ const create = (req,res) => {
    })
 }
 
+const setPassword = async (req,res) => {
+    // update column password
+    const {
+        Tel,
+        Password,
+        ConfirmPassword
+    } = req.body;
+    //validate param require 
+    var message = {}; // empty object
+    if(Tel == null || Tel == ""){
+        message.Tel = "Tel requred!"
+    }
+    if(Password == null || Password == ""){
+        message.Password = "Password requred!"
+    }else{
+        if(Password != ConfirmPassword){
+            message.Password = "Password not match!"
+        }
+    }
+    if(Object.keys(message).length > 0){
+        res.json({
+            message : message
+        })
+        return false
+    }
+
+    const user = await checkIsExistUser(Tel);
+    if(!user){
+        res.json({
+            message : "User does not exist!",
+        })
+    }else{
+        // bcrypt : hash password (123434=>sdfajo94u5o34up03452809453)
+        const hashPassword = await bcrypt.hashSync(Password,10)
+        var sql = "UPDATE employee SET Password = ? WHERE Tel= ?";
+        const data = await db.query(sql,[hashPassword,Tel]);
+        delete user.Password
+        res.json({
+            message : data.affectedRows ? "Passsword set success!" : "Something wrong!",
+            profile : user
+        }) 
+    }
+}
+
+const checkIsExistUser = async (Tel) => {
+    const user = await db.query("SELECT * FROM employee WHERE Tel = ?",[Tel])
+    if(user){
+        return user[0]
+    }else{
+        return null
+    }
+}
+
+const login = async (req,res) => {
+    const {
+        Tel,Password
+    } = req.body;
+    var message = {}; // empty object
+    if(Tel == null || Tel == ""){
+        message.Tel = "Please input username!"
+    }
+    if(Password == null || Password == ""){
+        message.Password = "Please input password!"
+    }
+    if(Object.keys(message).length > 0){
+        res.json({
+            message : message
+        })
+        return false
+    }
+    const user = await checkIsExistUser(Tel);
+    if(!user){
+        res.json({
+            message : "User does not exist!",
+        })
+    }else{
+        // verify password (password_front_client, password_in_db)
+        const isCorrectPassword = await bcrypt.compareSync(Password,user.Password)
+        delete user.Password
+        res.json({
+            message : isCorrectPassword ?  "Login success!" : "Incorrect password!",
+            profile : isCorrectPassword ? user : null
+        })
+    }
+}
+
 const remove = (req,res) => {
     const { Id } = req.body;
     var sql = "DELETE FROM employee WHERE Id = ?";
@@ -133,5 +228,7 @@ module.exports = {
     getAll,
     create,
     remove,
-    update
+    update,
+    setPassword,
+    login
 }

@@ -17,9 +17,11 @@ const EmplyeePage = () => {
 
     const [form] = Form.useForm();
     const [list, setList] = useState([]);
+    const [total, setTotal] = useState(0);
     const [loading,setLoadin] = useState(false)
     const [visible, setVisible] = useState(false)
     const [Id,setId] = useState(null)
+    const [textSearch , setTextSearch] = useState("")
 
     useEffect(() => {
         getList()
@@ -27,10 +29,15 @@ const EmplyeePage = () => {
 
     const getList = async () => {
         setLoadin(true);
-        const res = await request("employee", "get");
+        var param = "";
+        if(textSearch != ""){
+            param = "?textSearch="+textSearch
+        }
+        const res = await request("employee"+param, "get");
         setLoadin(false);
         if (res) {
             setList(res.list)
+            setTotal(res.total[0].Total)
         } else {
 
         }
@@ -106,13 +113,24 @@ const EmplyeePage = () => {
         setVisible(true)
     }
 
+    const onSearch = (value) => {
+        getList()
+    }
+
+    const onChangeTextSearch = (e) => {
+        setTextSearch(e.target.value)
+    }
+
     return (
         <div>
             <Spin spinning={loading}>
                 <div className={styles.headerContainer}>
                     <div className={styles.containFilter}>
-                        <div className={styles.txtHeader}>Employee</div>
-                        <Input.Search />
+                        <div>
+                            <div className={styles.txtHeader}>Employee</div>
+                            <div>total : {total} Emp</div>
+                        </div>
+                        <Input.Search allowClear onSearch={onSearch} onChange={onChangeTextSearch} />
                     </div>
                     <Button onClick={onNewEmplyee}>New Employee</Button>
                 </div>
