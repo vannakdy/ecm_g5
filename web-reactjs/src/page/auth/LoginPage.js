@@ -4,18 +4,26 @@ import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import styles from './LoginPage.module.css';
-
+import {request} from "../../share/request"
 const LoginPage = () => {
-  const onFinish = (values) => {
-    // employee/login
-    const staticUsername = "sa", staticPassword="123456"
-    if(values.username == staticUsername && values.password == staticPassword){
-        localStorage.setItem("isLogin",'1')
-        window.location.href="/" // link to other page by routename
-    }else{
-        message.warning("Username or password incorrect!")
-    }
-  };
+
+    const onFinish = async (values) => {
+        // 09688889999, 123456
+        var param = {
+            "Tel" : values.username,
+            "Password" : values.password,
+        }
+        const res = await request("employee/login","post",param)
+        if(res.isSuccess){
+            // JSON.stringify(obj) convert object to string
+            // JSON.parse(obj) convert string object to  object json
+            localStorage.setItem("profile",JSON.stringify(res.profile))// user object json 
+            localStorage.setItem("isLogin",'1')
+            window.location.href="/" // link to other page by routename
+        }else{
+            message.warning(res.message)
+        }
+    };
   return (
     <div className={styles.container}>
         <div className={styles.txtLogin}>Login</div>

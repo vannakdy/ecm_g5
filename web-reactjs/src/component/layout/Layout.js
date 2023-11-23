@@ -12,24 +12,30 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
+    DownOutlined
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, Dropdown, Space, Badge, Avatar } from 'antd';
+import { getCurrentUser, isLogin } from "../../share/helper";
+import styles from "./Layout.module.css"
 const { Header, Sider, Content } = Layout;
 
 function MainLayout() {
-    const isLogin = localStorage.getItem("isLogin")
-    useEffect(()=>{
-        if(isLogin == null || isLogin == 'null'){ // mean not login
-            window.location.href = "/login" // direct login page
-        }
-    },[])
-
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-
     const navigate = useNavigate();
+    const user = getCurrentUser()
+    useEffect(()=>{
+        if(!isLogin()){ // mean not login
+            window.location.href = "/login" // direct login page
+        }
+    },[])
+
+    if(!isLogin()){
+        return null
+    }
+
 
     const onLinkPage = (routeName) => { // use for link to other page 
         navigate(routeName) // /category , /login
@@ -40,9 +46,9 @@ function MainLayout() {
         window.location.href="/login"
     }
 
-    if(isLogin == null || isLogin == 'null'){
-        return null
-    }
+   
+
+    
 
     return (
         <div>
@@ -90,18 +96,65 @@ function MainLayout() {
                             background: colorBgContainer,
                         }}
                     >
-                        {/* <Button
-                            type="text"
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{
-                                fontSize: '16px',
-                                width: 64,
-                                height: 64,
-                            }}
-                        /> */}
-                        <Button onClick={()=>setCollapsed(!collapsed)}>Toggle</Button>
-                        <Button onClick={onLogout}>Logout</Button>
+                        <div className={styles.containHeader}>
+                            <div>
+                                <Button
+                                    type="text"
+                                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                    onClick={() => setCollapsed(!collapsed)}
+                                    style={{
+                                        fontSize: '16px',
+                                        width: 64,
+                                        height: 64,
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <Space>
+                                    <div style={{marginRight:15}}>
+                                        <Badge size="small" count={5}>
+                                            <Avatar  shape="square" size="small" />
+                                        </Badge>
+                                    </div>
+                                    <Dropdown
+                                        menu={{
+                                            items:[
+                                                {
+                                                    key:"0",
+                                                    label:"Profile"
+                                                },
+                                                {
+                                                    key:"1",
+                                                    label:"Change password"
+                                                },
+                                                {
+                                                    key:"2",
+                                                    label:"Setting"
+                                                },
+                                                {
+                                                    key:"3",
+                                                    label:"Logout",
+                                                    danger:true,
+                                                    onClick:()=>onLogout()
+                                                }
+                                            ]
+                                        }}
+                                    >
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                <UserOutlined />
+                                                {/* <img 
+                                                    src=""
+                                                    style={{}}
+                                                /> */}
+                                                {user.Firstname+"-"+user.Lastname}
+                                                <DownOutlined />
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+                                </Space>
+                            </div>
+                        </div>
                         
                     </Header>
                     <Content
