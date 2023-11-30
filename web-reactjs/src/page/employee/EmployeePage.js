@@ -1,7 +1,7 @@
 import { request } from "../../share/request";
 import { useEffect, useState } from "react";
 import { Button, Table, Space, Tag, Input, Modal, Form, Select, Slider,Spin, message, Popconfirm } from 'antd';
-import { formatDateClient, formatDateServer } from "../../share/helper";
+import { formatDateClient, formatDateServer,Config } from "../../share/helper";
 import styles from "./styles.module.css"
 const { Option } = Select;
 const layout = {
@@ -21,6 +21,7 @@ const EmplyeePage = () => {
     const [loading,setLoadin] = useState(false)
     const [visible, setVisible] = useState(false)
     const [Id,setId] = useState(null)
+    const [image,setImage] = useState(null)
     const [textSearch , setTextSearch] = useState("")
 
     useEffect(() => {
@@ -67,22 +68,34 @@ const EmplyeePage = () => {
 
     const onFinish =  async (values) => { // get value from form
         // can get data from form then past to api
-        var param = {
-            "Firstname": values.Firstname,
-            "Lastname": values.Lastname,
-            "Gender": values.Gender,
-            "Dob": values.Dob,
-            "Email":values.Email,
-            "Tel": values.Tel,
-            "Address": values.Address,
-            "Role": values.Role,
-        }
+        // var param = {
+        //     "Firstname": values.Firstname,
+        //     "Lastname": values.Lastname,
+        //     "Gender": values.Gender,
+        //     "Dob": values.Dob,
+        //     "Email":values.Email,
+        //     "Tel": values.Tel,
+        //     "Address": values.Address,
+        //     "Role": values.Role,
+        //     "Image" : ""
+        // }
+
+        var formData = new FormData(); // create formData
+        formData.append("Firstname",values.Firstname)
+        formData.append("Lastname",values.Lastname)
+        formData.append("Gender",values.Gender)
+        formData.append("Dob",values.Dob)
+        formData.append("Email",values.Email)
+        formData.append("Tel",values.Tel)
+        formData.append("Role",values.Role)
+        formData.append("Address",values.Address)
+        formData.append("image_emp",image,image.filename)
         var method = "post"
         if(Id != null){ // mean update
-            param.Id = Id;
+            formData.append("Id",Id)
             method = "put"
         }
-        const res = await request("employee",method,param);
+        const res = await request("employee",method,formData);
         if(!res.error){
             message.success(res.message)
             getList()
@@ -119,6 +132,11 @@ const EmplyeePage = () => {
 
     const onChangeTextSearch = (e) => {
         setTextSearch(e.target.value)
+    }
+
+    const onChangFile = (e) => {
+        var file = e.target.files[0];
+        setImage(file)
     }
 
     return (
@@ -174,6 +192,19 @@ const EmplyeePage = () => {
                             key: "Tel",
                             title: "Tel",
                             dataIndex: 'Tel'
+                        },
+                        {
+                            key: "Image",
+                            title: "Image",
+                            dataIndex: 'Image',
+                            render : (value,rows,index) => {
+                                return (
+                                    <img 
+                                        src={Config.image_path+value}
+                                        width={100}
+                                    />
+                                )
+                            }
                         },
                         {
                             key: "Address",
@@ -328,8 +359,16 @@ const EmplyeePage = () => {
                         >
                             <Input  />
                         </Form.Item>
-
-
+                        
+                        <Form.Item
+                            label="Select picture"
+                        >
+                            <input 
+                                type="file" 
+                                onChange={onChangFile}
+                            />
+                        </Form.Item>
+                        
                         <Form.Item  wrapperCol={24} style={{textAlign:"right"}}>
                             <Space>
                                 <Button htmlType="button" onClick={onCloseModal}>Cancel</Button>

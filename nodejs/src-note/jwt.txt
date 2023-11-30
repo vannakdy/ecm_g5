@@ -1,0 +1,44 @@
+var access_token = jwt.sign({data:{...obj}},TOKEN_KEY,{expiresIn:"2h"})
+var refresh_token = jwt.sign({data:{...obj}},REFRESH_KEY)
+
+
+exports.userGuard = (parameter) => {
+    return (req, res, next) => {
+        var authorization = req.headers.authorization; // token from client
+        var token_from_client = null
+        if (authorization != null && authorization != "") {
+            token_from_client = authorization.split(" ") // authorization : "Bearer lkjsljrl;kjsiejr;lqjl;ksjdfakljs;ljl;r"
+            token_from_client = token_from_client[1]
+        }
+        if (token_from_client == null) {
+            res.status(401).send({
+                message: 'Unauthorized',
+            });
+        } else {
+            jwt.verify(token_from_client, TOKEN_KEY, (error, result) => {
+                
+                if (error) {
+                    res.status(401).send({
+                        message: 'Unauthorized',
+                        error: error
+                    });
+                } else {
+                    // check is has permission 
+                    var permission = result.data.permission // get permmission array from verify token
+                    req.user = result.data // write user property 
+                    req.user_id = result.data.user.customer_id
+                    if(parameter == null){
+                        next();
+                    }else if(permission.includes(parameter)){
+                        next();
+                    }else{
+                        res.status(401).send({
+                            message: 'Unauthorized',
+                        });
+                    }
+                }
+            })
+        }
+    }
+}
+

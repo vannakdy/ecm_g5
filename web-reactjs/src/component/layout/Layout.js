@@ -52,6 +52,7 @@ function MainLayout() {
 
     return (
         <div>
+            
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className="demo-logo-vertical" />
@@ -89,6 +90,12 @@ function MainLayout() {
                         ]}
                     />
                 </Sider>
+                {/* <img 
+                    src="http://localhost:81/project/image_5/image_emp-1701266235497-60366065" 
+                    
+                    width={100}
+                    height={100}
+                /> */}
                 <Layout>
                     <Header
                         style={{

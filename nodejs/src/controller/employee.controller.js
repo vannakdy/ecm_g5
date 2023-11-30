@@ -10,9 +10,12 @@ const getAll = async (req,res) => {
     if(textSearch != null && textSearch != ""){
         sqlSelect += " WHERE Firstname LIKE '%"+textSearch+"%' OR Lastname LIKE '%"+textSearch+"%' OR Tel LIKE '%"+textSearch+"%' "
     }
+
+    sqlSelect += " ORDER BY Id DESC"
     
     const listEmployee = await db.query(sqlSelect);
     const total = await db.query("SELECT COUNT(Id) as Total FROM employee; ")
+    
     res.json({
         list:listEmployee,
         total:total,
@@ -80,8 +83,12 @@ const create = (req,res) => {
    const {
         Firstname,Lastname,Gender,Dob,Email,Tel,Address,Role
    } = req.body;
-   var sql = "INSERT INTO employee (Firstname,Lastname,Gender,Dob,Email,Tel,Address,Role) VALUES (?,?,?,?,?,?,?,?)"
-   var param = [Firstname,Lastname,Gender,Dob,Email,Tel,Address,Role];
+   var filename = null
+   if(req.file){
+    filename = req.file.filename
+   }
+   var sql = "INSERT INTO employee (Firstname,Lastname,Gender,Dob,Image,Email,Tel,Address,Role) VALUES (?,?,?,?,?,?,?,?,?)"
+   var param = [Firstname,Lastname,Gender,Dob,filename,Email,Tel,Address,Role];
    db.query(sql,param,(error,rows)=>{
      if(!error){
         res.json({

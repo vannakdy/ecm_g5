@@ -1,5 +1,9 @@
 import moment from 'moment'
 
+export const Config = {
+    image_path : "http://localhost:81/project/image_5/"
+}
+
 export const formatDateClient = (date,pattern="DD/MM/YYYY") => {
     return moment(date).format(pattern)
 }
