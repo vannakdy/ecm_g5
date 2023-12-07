@@ -8,6 +8,6 @@ const employee = (app) => {
     app.post("/api/employee/set-password",emplyeeController.setPassword)
     app.post("/api/employee/login",emplyeeController.login)
     app.delete("/api/employee",emplyeeController.remove)
-    app.put("/api/employee",emplyeeController.update)
+    app.put("/api/employee",upload.single("image_emp"),emplyeeController.update)
 }
 module.exports = employee

@@ -8,7 +8,7 @@ import {request} from "../../share/request"
 const LoginPage = () => {
 
     const onFinish = async (values) => {
-        // 09688889999, 123456
+        // 0988888889, 123456
         var param = {
             "Tel" : values.username,
             "Password" : values.password,

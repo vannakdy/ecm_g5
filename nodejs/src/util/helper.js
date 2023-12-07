@@ -1,9 +1,14 @@
 const multer = require("multer")
+const fs = require("fs")
+
+const Config = {
+    image_path : "C:/xampp/htdocs/project/image_5/"
+}
 
 const upload = multer({
     storage: multer.diskStorage({
         destination : function (req,file,callback) {
-            callback(null,"C:/xampp/htdocs/project/image_5")
+            callback(null,Config.image_path)
         },
         filename : function(req,file,callback){
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -22,6 +27,20 @@ const upload = multer({
     }
 })
 
+
+const removeFile = (fileName) => {
+    var filePath =  Config.image_path + fileName;
+    try {
+        return fs.unlinkSync(filePath);
+    } catch (err) {
+        return false
+    // res.status(500).send({
+    //   message: "Could not delete the file. " + err,
+    // });
+    }
+}
+
 module.exports = {
-    upload
+    upload,
+    removeFile
 }

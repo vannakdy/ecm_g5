@@ -1,5 +1,6 @@
 
 https://expressjs.com/en/resources/middleware/multer.html
+
 exports.upload = multer({
     storage : multer.diskStorage({
         destination : function (req,file,callback){
@@ -114,5 +115,21 @@ Custom Button Upload
     />
 
 </label>
+
+
+
+# Remove seleted
+    https://bobbyhadz.com/blog/react-reset-file-input
+
+    // 👇️ create a ref for the file input
+    const inputRef = useRef(null);
+
+    const resetFileInput = () => {
+        // 👇️ reset input value
+        inputRef.current.value = null;
+    };
+
+    <input ref={inputRef} type="file" onChange={handleFileChange} />
+    <button onClick={resetFileInput}>Reset file input</button>
 
 

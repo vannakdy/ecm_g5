@@ -1,6 +1,7 @@
 
 const db = require("../util/db")
 const bcrypt = require("bcrypt")
+const {removeFile} = require("../util/helper")
 
 const getAll = async (req,res) => {
     // req.query, req.params, req.body
@@ -192,11 +193,14 @@ const login = async (req,res) => {
 }
 
 const remove = (req,res) => {
-    const { Id } = req.body;
+    const { Id,Image } = req.body;
     var sql = "DELETE FROM employee WHERE Id = ?";
-    var param = [Id]
+    var param = [Id];
     db.query(sql,param,(error,rows)=>{
         if(!error){
+            if(rows.affectedRows != 0){
+                removeFile(Image)
+            }
             res.json({
                 message:rows.affectedRows != 0 ? "Remove success!" : "Employee not found!",
                 data:rows
@@ -212,20 +216,40 @@ const remove = (req,res) => {
 
 const update = (req,res) => {
   const {
-    Firstname,Lastname,Gender,Dob,Email,Tel,Address,Role,Id
+    Firstname,Lastname,Gender,Dob,Email,Tel,Address,Role,Id,Image,is_remove_file
   } = req.body;
-  var sql = "UPDATE employee SET Firstname=?, Lastname=?, Gender=?, Dob=?, Email=?, Tel=?, Address=?, Role=? WHERE Id=?"
-  var param = [Firstname,Lastname,Gender,Dob,Email,Tel,Address,Role,Id]
-  db.query(sql,param,(error,rows)=>{
-    if(!error){
-        res.json({
-            message:rows.affectedRows != 0 ? "Update success!" : "Employee not found!",
-            data:rows
-        })
-    }else{
-        res.json({
-            error:true,
-            message:error
+  var filename = null
+  if(req.file){
+    filename = req.file.filename
+  }else{
+    filename = Image
+  }
+
+  db.query("SELECT * FROM employee WHERE Id = ?",[Id],(error1,row1)=>{
+    if(!error1){
+        var sql = "UPDATE employee SET Firstname=?, Lastname=?, Gender=?, Dob=?, Image=?, Email=?, Tel=?, Address=?, Role=? WHERE Id=?"
+        var param = [Firstname,Lastname,Gender,Dob,filename,Email,Tel,Address,Role,Id]
+        db.query(sql,param,(error,rows)=>{
+            if(!error){
+                if(rows.affectedRows !=0 ){
+                    if(req.file || (Image == null)){
+                        if(row1[0].Image != null && row1[0].Image != ""){
+                            removeFile(row1[0].Image)  // remove image in server that updated
+                        }
+                    }
+                    
+                }
+                res.json({
+                    message:rows.affectedRows != 0 ? "Update success!" : "Employee not found!",
+                    data:rows,
+                    is_remove_file:is_remove_file
+                })
+            }else{
+                res.json({
+                    error:true,
+                    message:error
+                })
+            }
         })
     }
   })
