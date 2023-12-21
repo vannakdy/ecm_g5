@@ -8,6 +8,8 @@ import {
 import {Button as ButtonAntd} from "antd"
 import {listProduct,PI} from "./data"
 import {useState} from "react"
+import SaleAndExpendChart from "../../component/chart/dashaboard/SaleAndExpendChart"
+import CustomerActiveChart from "../../component/chart/dashaboard/CustomerActiveChart"
 
 
 const HomePage = () => {
@@ -66,18 +68,8 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* using state in view */}
-     <h1>name : {name}</h1>
-     <h1>gender : {gender}</h1>
-     <h1>tel : {tel}</h1>
-     <button onClick={onClickMe1}>Click Me1</button>
-     <Button onClick={onClickMe2}>Click Me2</Button>
-
-     <h1>count state : {count}</h1>
-     <h1>x variable: {x}</h1>
-     <Button onClick={onDescrease}>-</Button>
-     <Button onClick={onIncrease}>+</Button>
-
+      <SaleAndExpendChart />
+      <CustomerActiveChart />
     </div>
   )
 }

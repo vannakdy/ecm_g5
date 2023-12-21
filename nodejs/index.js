@@ -17,11 +17,25 @@ app.get("/",(req,res)=>{
 const employee = require("./src/route/employee.route") 
 const customer = require("./src/route/customer.route")
 const category = require("./src/route/category.route")
+const payment_method = require("./src/route/payment_method.route")
+const invoice_status = require("./src/route/invoice_status.route")
+const roles = require("./src/route/roles.route")
+const product = require("./src/route/product.route")
+const shift = require("./src/route/shift.route")
+const shift_details = require("./src/route/shift_details.route")
+const invoice = require("./src/route/invoice.route")
 
 // call route
 employee(app)
 customer(app)
 category(app)
+payment_method(app)
+invoice_status(app)
+roles(app)
+product(app)
+shift(app)
+shift_details(app)
+invoice(app)
 
 
 // defind port to server

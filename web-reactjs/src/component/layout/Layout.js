@@ -15,7 +15,7 @@ import {
     DownOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme, Dropdown, Space, Badge, Avatar } from 'antd';
-import { getCurrentUser, isLogin } from "../../share/helper";
+import { Config, getCurrentUser, isLogin } from "../../share/helper";
 import styles from "./Layout.module.css"
 const { Header, Sider, Content } = Layout;
 
@@ -52,7 +52,6 @@ function MainLayout() {
 
     return (
         <div>
-            
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className="demo-logo-vertical" />
@@ -74,6 +73,12 @@ function MainLayout() {
                                 onClick : () => onLinkPage("/category")
                             },
                             {
+                                key: 'product',
+                                icon: <VideoCameraOutlined />,
+                                label: 'Product',
+                                onClick : () => onLinkPage("/product")
+                            },
+                            {
                                 key: '3',
                                 icon: <UploadOutlined />,
                                 label: 'Customer',
@@ -85,6 +90,41 @@ function MainLayout() {
                                 icon: <UploadOutlined />,
                                 label: 'Emplyee',
                                 onClick : () => onLinkPage("/employee")
+                                
+                            },
+                            {
+                                key: '5',
+                                icon: <UploadOutlined />,
+                                label: 'Payment method',
+                                onClick : () => onLinkPage("/payment_method")
+                                
+                            },
+                            {
+                                key: '6',
+                                icon: <UploadOutlined />,
+                                label: 'Invoice Status',
+                                onClick : () => onLinkPage("/invoice_status")
+                                
+                            },
+                            {
+                                key: '7',
+                                icon: <UploadOutlined />,
+                                label: 'Role',
+                                onClick : () => onLinkPage("/role")
+                                
+                            },
+                            {
+                                key: '8',
+                                icon: <UploadOutlined />,
+                                label: 'Shift',
+                                onClick : () => onLinkPage("/shift")
+                                
+                            },
+                            {
+                                key: '9',
+                                icon: <UploadOutlined />,
+                                label: 'Shift Dtails',
+                                onClick : () => onLinkPage("/shift_details")
                                 
                             }
                         ]}
@@ -149,11 +189,24 @@ function MainLayout() {
                                     >
                                         <a onClick={(e) => e.preventDefault()}>
                                             <Space>
-                                                <UserOutlined />
-                                                {/* <img 
-                                                    src=""
-                                                    style={{}}
-                                                /> */}
+                                                {/* <UserOutlined /> */}
+                                                {(user.Image == "" || user.Image == null) ?
+                                                    <div 
+                                                        style={{
+                                                            width:40,
+                                                            height:40,
+                                                            borderRadius:20,
+                                                            backgroundColor:"#eee"
+                                                        }} 
+                                                    />
+                                                    :
+                                                    <img 
+                                                        src={Config.image_path+user.Image}
+                                                        style={{widows:40,height:40,borderRadius:20}}
+                                                    />
+
+                                                }
+                                               
                                                 {user.Firstname+"-"+user.Lastname}
                                                 <DownOutlined />
                                             </Space>
@@ -164,16 +217,18 @@ function MainLayout() {
                         </div>
                         
                     </Header>
-                    <Content
-                        style={{
-                            margin: '24px 16px',
-                            padding: 24,
-                            minHeight: "80vh",
-                            background: colorBgContainer,
-                        }}
-                    >
-                        <Outlet />
-                    </Content>
+                    {/* <Content > */}
+                        <div
+                            style={{
+                                margin: '24px 16px',
+                                padding: 24,
+                                height: "100vh",
+                                background: colorBgContainer,
+                            }}
+                        >
+                            <Outlet />
+                        </div>
+                    {/* </Content> */}
                 </Layout>
             </Layout>
            

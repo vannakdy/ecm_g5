@@ -5,7 +5,7 @@ const db = mysql.createConnection({
     host:"localhost",
     user:"root",
     password:"",
-    database:"db_test",
+    database:"react_node_mysql_g5",
     port:"5306" // 3306 || 
 })
 

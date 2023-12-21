@@ -1,3 +1,4 @@
+import { message } from "antd";
 import axios from "axios"
 
 const base_url = "http://localhost:8081/api/";
@@ -15,6 +16,12 @@ export const request = (url="",method="get",data={}) => {
     }).then(res=>{
        return res.data;
     }).catch(error=>{
+       console.log(error)
+       var respone = error.response
+       if(respone.status == 500){
+            var mesage_from_server = respone.data.message;
+            message.error(mesage_from_server)
+       }
        return false
     }).finally(()=>{
         

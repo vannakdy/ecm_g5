@@ -1,0 +1,15 @@
+ pagination={{
+    defaultCurrent:1,
+    total:totalRecord?.total,
+    pageSize:10,
+    onChange:(page,pageSize)=>{
+        setObjFilter({
+            ...objFilter,
+            page:page
+        })
+    },
+}}
+
+
+
+var limit = " LIMIT "+limitItem+" OFFSET "+offset+""
